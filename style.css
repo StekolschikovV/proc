@@ -1,0 +1,110 @@
+/*btn*/
+.btn-group * {
+    border-radius: 0 !important;
+    background: #5cb85c !important;
+    text-shadow: none !important;
+    color: white !important;
+}
+.open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover{
+    border-radius: 0;
+    background: #5cb85c;
+    text-shadow: none;
+    color: white;
+}
+.btn-group button:hover{
+    background: #449d44;
+}
+.btn-group button:hover{
+    background: #449d44;
+}
+/*btn*/
+/*process*/
+#process{
+    /*background: #f5f5f5;*/
+    width: 100%;
+    height: 500px;
+    position: relative;
+}
+#process * {
+    user-select: none !important;
+}
+svg{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+}
+/*process*/
+
+/*task*/
+.task{
+    position: absolute !important;
+    padding: 0.5em 1em;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 0.5em;
+    border: 1px solid #333;
+    color: #333;
+}
+.task .norm, .task .ok, .task .err{
+    width: 1em;
+    height: 1em;
+    position: absolute;
+    display: none;
+    z-index: 9;
+}
+.task[data-type="timeout"] {
+    background: #e1edec;
+}
+.task[data-type="add"] {
+    background: #449d44;
+}
+.task[data-type="rm"] {
+     background: red;
+}
+
+.task[data-type="if"] {
+    background: white;
+}
+.task[data-type="timeout"] .norm{
+    display: block;
+    left: 100%;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    background: #333;
+}
+.task[data-type="if"] .ok{
+    display: block;
+    left: 100%;
+    top: 0.2em;
+    margin: auto;
+    background: greenyellow;
+}
+.task[data-type="if"] .err{
+    display: block;
+    left: 100%;
+    bottom: 0.2em;
+    margin: auto;
+    background: red;
+}
+.task[data-type="add"] .norm{
+    display: block;
+    left: 100%;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    background: #333;
+}
+.task[data-type="rm"] .norm{
+    display: block;
+    left: 100%;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    background: #333;
+}
+
+/*task*/
