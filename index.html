@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./lib/bootstrap.min.css">
+    <link rel="stylesheet" href="./lib/bootstrap-theme.min.css">
+    <script src="./lib/jquery.min.js"></script>
+    <script src="./lib/jquery-ui.min.js"></script>
+    <script src="./lib/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -17,6 +17,8 @@
     <div class="row">
         <div class="col-md-12 text-right">
             <div class="btn-group" role="group">
+                <button class="btn" onclick="process.save_result()">Сохранить</button>
+                <button class="btn" onclick="process.load_result()">Загрузить</button>
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                     Добавить блок
@@ -27,6 +29,7 @@
                     <li><a href="#" id="btn-if">Условие</a></li>
                     <li><a href="#" id="btn-add">Добавление</a></li>
                     <li><a href="#" id="btn-rm">Удаление</a></li>
+                    <li><a href="#" id="mailing">Отправка рассылки</a></li>
                 </ul>
             </div>
         </div>
@@ -56,6 +59,156 @@
     </div>
 </div>
 <!--process-->
+
+<!--result-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Результат для сохранения</h5>
+            <textarea id="result" style="width: 100%; height: 10em"></textarea>
+        </div>
+    </div>
+</div>
+
+<!--result-->
+
+<!--modals-->
+<!--rm-->
+<form class="modal hide" id="modal-mailing" onsubmit="return false">
+    <div class="title">
+        <input name="title" type="text" value="Отправка рассылки">
+        <div class="close" onclick="modal.btn_close()">x</div>
+    </div>
+    <hr>
+    <h5>Рассылка по группе</h5>
+    <select name="group">
+        <option value="g1">g1</option>
+        <option value="g2">g2</option>
+        <option value="g3">g3</option>
+        <option value="g4">g4</option>
+    </select>
+
+    <h5>Текст</h5>
+    <textarea name="text"></textarea>
+
+    <h5>Описание для менеджера</h5>
+    <textarea name="note"></textarea>
+    <div class="text-right">
+        <button onclick="modal.btn_rm()">Удалить</button>
+        <button onclick="modal.btn_save()">Сохранить</button>
+    </div>
+</form>
+<!--rm-->
+<!--rm-->
+<form class="modal hide" id="modal-rm" onsubmit="return false">
+    <div class="title">
+        <input name="title" type="text" value="Удаление">
+        <div class="close" onclick="modal.btn_close()">x</div>
+    </div>
+    <hr>
+    <h5>Удаление из группы</h5>
+    <select name="group">
+        <option value="g1">g1</option>
+        <option value="g2">g2</option>
+        <option value="g3">g3</option>
+        <option value="g4">g4</option>
+    </select>
+
+    <h5>Описание для менеджера</h5>
+    <textarea name="note"></textarea>
+    <div class="text-right">
+        <button onclick="modal.btn_rm()">Удалить</button>
+        <button onclick="modal.btn_save()">Сохранить</button>
+    </div>
+</form>
+<!--rm-->
+<!--add-->
+<form class="modal hide" id="modal-add" onsubmit="return false">
+    <div class="title">
+        <input name="title" type="text" value="Добавить">
+        <div class="close" onclick="modal.btn_close()">x</div>
+    </div>
+    <hr>
+    <h5>Добавить в группу</h5>
+    <select name="group">
+        <option value="g1">g1</option>
+        <option value="g2">g2</option>
+        <option value="g3">g3</option>
+        <option value="g4">g4</option>
+    </select>
+
+    <h5>Описание для менеджера</h5>
+    <textarea name="note"></textarea>
+    <div class="text-right">
+        <button onclick="modal.btn_rm()">Удалить</button>
+        <button onclick="modal.btn_save()">Сохранить</button>
+    </div>
+</form>
+<!--add-->
+<!--if-->
+<form class="modal hide" id="modal-if" onsubmit="return false">
+    <div class="title">
+        <input name="title" type="text" value="Условие">
+        <div class="close" onclick="modal.btn_close()">x</div>
+    </div>
+    <hr>
+    <h5>Если есть в группу</h5>
+    <select name="group">
+        <option value="g1">g1</option>
+        <option value="g2">g2</option>
+        <option value="g3">g3</option>
+        <option value="g4">g4</option>
+    </select>
+
+    <h5>Описание для менеджера</h5>
+    <textarea name="note"></textarea>
+    <div class="text-right">
+        <button onclick="modal.btn_rm()">Удалить</button>
+        <button onclick="modal.btn_save()">Сохранить</button>
+    </div>
+</form>
+<!--if-->
+<!--timeout-->
+<form class="modal hide" id="modal-timeout" onsubmit="return false">
+    <div class="title">
+        <input name="title" type="text" value="Задержка">
+        <div class="close" onclick="modal.btn_close()">x</div>
+    </div>
+    <hr>
+    <input checked value="1" type="radio" name="t" id='radio_from_this_moment' data-show="from_this_moment" data-hide="from_time">От текущего момента
+    <input value="2" type="radio" name="t" id='radio_from_time' data-show="from_time" data-hide="from_this_moment">Фиксированное время
+    <div id="from_this_moment">
+        <h5>Укажите задержку</h5>
+        <div class="inline">
+            <input name="day" type="text">
+            <h5>дней</h5>
+            <input name="hour" type="text">
+            <h5>часов</h5>
+            <input name="min" type="text">
+            <h5>минут</h5>
+        </div>
+    </div>
+    <div id="from_time" class="hide">
+        <div class="inline">
+            <h5>Укажите дату и время</h5>
+            <input type="text">
+        </div>
+        <div class="inline">
+            <h5>Вызывать таймаут если прошло более</h5>
+            <input type="text">
+            <h5>часов</h5>
+        </div>
+
+    </div>
+    <h5>Описание для менеджера</h5>
+    <textarea name="note"></textarea>
+    <div class="text-right">
+        <button onclick="modal.btn_rm()">Удалить</button>
+        <button onclick="modal.btn_save()">Сохранить</button>
+    </div>
+</form>
+<!--timeout-->
+<!--modals-->
 
 <script src="script.js"></script>
 

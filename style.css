@@ -34,7 +34,8 @@ svg{
     top: 0;
     width: 100%;
     height: 100%;
-
+    z-index: 0;
+    background: #f5f5f5;
 }
 /*process*/
 
@@ -48,7 +49,7 @@ svg{
     border: 1px solid #333;
     color: #333;
 }
-.task .norm, .task .ok, .task .err{
+.task .norm, .task .ok, .task .err, .task .mailing{
     width: 1em;
     height: 1em;
     position: absolute;
@@ -62,12 +63,15 @@ svg{
     background: #449d44;
 }
 .task[data-type="rm"] {
-     background: red;
+    background: red;
+}
+.task[data-type="if"] {
+    background: #a48cff;
+}
+.task[data-type="mailing"] {
+    background: #ff41e0;
 }
 
-.task[data-type="if"] {
-    background: white;
-}
 .task[data-type="timeout"] .norm{
     display: block;
     left: 100%;
@@ -106,5 +110,63 @@ svg{
     margin: auto;
     background: #333;
 }
-
+.task[data-type="mailing"] .norm{
+    display: block;
+    left: 100%;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    background: #333;
+}
 /*task*/
+
+
+/*modal*/
+.modal{
+    display: inline-table;
+    background: white;
+    position: fixed;
+    z-index: 9;
+    top: 0;
+    max-width: 600px;
+    width: 100%;
+    margin: auto;
+    padding: 1em;
+    border-radius: 1em;
+    /*height: 100%;*/
+}
+.modal input{
+    outline: none!important;
+}
+.modal .title input{
+    border: 0;
+    width: 100%;
+}
+.modal .close{
+    position: absolute;
+    right: 1em;
+    top: 0.8em;
+}
+.modal hr{
+    width: calc(100% + 2em);
+    margin-left: -1em;
+}
+.modal .hide{
+    display: none;
+}
+.modal .inline{
+    display: flex;
+}
+.modal .inline input{
+    width: 2em;
+    height: 1.5em;
+    margin-top: 0.5em;
+}
+.modal .inline h5{
+    margin-left: 1em;
+    margin-right: 1em;
+}
+.modal textarea{
+    width: 100%;
+}
+/*modal*/
