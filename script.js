@@ -80,6 +80,9 @@ class Process {
         document.querySelector('#btn-proc').addEventListener('click', () => {
             this.add_task('proc', 'Дочерний процесс')
     })
+        document.querySelector('#btn-proxy').addEventListener('click', () => {
+            this.add_task('proxy', 'Прокси')
+    })
         $('*').mouseup(() => {
             if (this.is_cursor_on_process) {
             this.is_mouse_down = false
@@ -174,6 +177,7 @@ class Process {
     })
         new_task_block.appendChild(err)
 
+        this.draw_arrow()
     }
 
     draw_arrow() {
@@ -204,13 +208,7 @@ class Process {
                         newLine.setAttribute("d", dStrLeft);
                     }
                 } catch (e) {}
-            } catch (e) {
-
-                let from = document.querySelector(`[data-id="${this.arrow_array[i].split('-')[0]}"]`)
-
-                console.log(this.arrow_array[i], this.arrow_array[i].split('-')[0])
-                console.log(from)
-            }
+            } catch (e) { }
 
         }
 
@@ -234,10 +232,8 @@ class Process {
 
             var dStrLeft = "M" + (position_from.x) + "," + (position_from.y) + " " + "C" + (position_from.x + 100) + "," + (position_from.y) + " " + (position_to.x - 100) + "," + (position_to.y) + " " + (position_to.x) + "," + (position_to.y);
             newLine.setAttribute("d", dStrLeft);
-        } else {
+        } else
             document.body.style.background = 'white'
-        }
-
     }
 
     add_arrow() {
@@ -252,13 +248,12 @@ class Process {
             for (let i = 0; i < this.arrow_array.length; i++) {
                 let el = this.arrow_array[i]
                 let el0 = el.split('-')[0]
-                if (this.temp_from == el0) {
+                if (this.temp_from == el0)
                     rm_id = i
-                }
             }
-            if (rm_id != undefined) {
-                this.arrow_array.splice(rm_id, 1);
-            }
+
+            if (rm_id != undefined && document.querySelector(`[data-id="${parseInt(this.temp_from)}"]`).dataset.type !== 'proxy')
+                this.arrow_array.splice(rm_id, 1)
             // add new
             let str = `${this.temp_from}-${this.temp_to}`
             if (!this.arrow_array.includes(str)) {
@@ -266,13 +261,14 @@ class Process {
                 this.clear_temp()
             }
         }
-
+        this.draw_arrow()
 
     }
 
     clear_temp() {
         this.temp_from = undefined
         this.temp_to = undefined
+        this.draw_arrow()
     }
 
     load_result() {
@@ -280,19 +276,22 @@ class Process {
         document.querySelector('#process').innerHTML = ''
         let res = JSON.parse(document.querySelector('#result').value)
         for (let i = 0; i < res.length; i++) {
-            // this.arrow_array =
-            if (res[i].norm_target != '') {
-                this.arrow_array.push(res[i].norm_target)
-            }
-            if (res[i].ok_target != '') {
-                this.arrow_array.push(res[i].ok_target)
-            }
-            if (res[i].err_target != '') {
-                this.arrow_array.push(res[i].err_target)
-            }
+            if(res[i].type !== 'proxy'){
+                if (res[i].norm_target != '')
+                    this.arrow_array.push(res[i].norm_target)
+                if (res[i].ok_target != '')
+                    this.arrow_array.push(res[i].ok_target)
+                if (res[i].err_target != '')
+                    this.arrow_array.push(res[i].err_target)
+            } else if (res[i].type == 'proxy'){
+                let res_proxy = res[i].norm_target.split(', ')
+                for(let j = 0; j < res_proxy.length; j++)
+                    this.arrow_array.push(res_proxy[j])
 
+            }
             this.add_task(res[i].type, res[i].title, res[i].id, res[i].style, res[i].form)
         }
+        this.draw_arrow()
 
     }
 
@@ -316,13 +315,18 @@ class Process {
             res.push(r)
         }
         document.querySelector('#result').value = JSON.stringify(res)
+        this.draw_arrow()
     }
 
     get_from_arrow_array(id, type) {
         let res = false
-        for (let i = 0; i < this.arrow_array.length; i++)
-            if (this.arrow_array[i].search(`${id}${type}`) > -1)
+        for (let i = 0; i < this.arrow_array.length; i++){
+            if (this.arrow_array[i].search(`${id}${type}`) > -1 && res == false){
                 res = this.arrow_array[i]
+            }else if (res !== false){
+                res += `, ${this.arrow_array[i]}`
+            }
+        }
         return res
     }
 
