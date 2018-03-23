@@ -1,7 +1,9 @@
 jQuery.fn.deserialize = function (data) {
     var f = this,
         map = {},
-        find = function (selector) { return f.is("form") ? f.find(selector) : f.filter(selector); };
+        find = function (selector) {
+            return f.is("form") ? f.find(selector) : f.filter(selector);
+        };
     //Get map of values
     jQuery.each(data.split("&"), function () {
         var nv = this.split("="),
@@ -34,7 +36,6 @@ jQuery.fn.deserialize = function (data) {
 };
 
 
-
 class Process {
 
     constructor() {
@@ -57,7 +58,7 @@ class Process {
         this.event()
 
         //test
-        this.add_task('timeout', 'Задержка')
+        this.add_task('start', 'Начало работы')
     }
 
     event() {
@@ -73,8 +74,11 @@ class Process {
         document.querySelector('#btn-rm').addEventListener('click', () => {
             this.add_task('rm', 'Удаленье')
     })
-        document.querySelector('#mailing').addEventListener('click', () => {
+        document.querySelector('#btn-mailing').addEventListener('click', () => {
             this.add_task('mailing', 'Отправка рассылки')
+    })
+        document.querySelector('#btn-proc').addEventListener('click', () => {
+            this.add_task('proc', 'Дочерний процесс')
     })
         $('*').mouseup(() => {
             if (this.is_cursor_on_process) {
@@ -88,7 +92,7 @@ class Process {
             if (this.is_cursor_on_process) {
             console.log('mousedown')
             this.is_mouse_down = true
-        }else {
+        } else {
             this.is_mouse_down = true
         }
     })
@@ -115,7 +119,7 @@ class Process {
     add_task(type, title, id, style, form) {
 
         let date = Date.now()
-        if(id)
+        if (id)
             date = id
 
         let new_task_block = document.createElement('div')
@@ -131,16 +135,16 @@ class Process {
         $(new_task_block).dblclick((e) => {
             modal.open_modal(new_task_block)
     })
-        if(style){
+        if (style) {
             new_task_block.style.top = style.top
             new_task_block.style.left = style.left
         }
-        if(form){
+        if (form) {
             new_task_block.setAttribute('data-form', form)
         }
         document.querySelector('#process').appendChild(new_task_block)
 
-        // type - norm, ok, err
+        // type - norm
         let norm = document.createElement('div')
         // norm.setAttribute('data-target', '')
         norm.setAttribute('data-id', date + 'n')
@@ -151,9 +155,8 @@ class Process {
         this.add_arrow()
     })
         new_task_block.appendChild(norm)
-
+        // type - ok
         let ok = document.createElement('div')
-        // ok.setAttribute('data-target', '')
         ok.setAttribute('data-id', date + 'o')
         ok.classList.add('ok')
         $(ok).mousedown(() => {
@@ -161,10 +164,9 @@ class Process {
         this.add_arrow()
     })
         new_task_block.appendChild(ok)
-
+        // type - err
         let err = document.createElement('div')
         err.setAttribute('data-id', date + 'e')
-        // err.setAttribute('data-target', '')
         err.classList.add('err')
         $(err).mousedown(() => {
             this.temp_from = err.dataset.id
@@ -174,38 +176,35 @@ class Process {
 
     }
 
-    draw_arrow(){
+    draw_arrow() {
 
         document.querySelector('#p').innerHTML = ''
 
-        for(let i = 0; i < this.arrow_array.length; i++){
+        for (let i = 0; i < this.arrow_array.length; i++) {
             try {
                 let from = document.querySelector(`[data-id="${this.arrow_array[i].split('-')[0]}"]`)
-                let from_parent =  from.parentNode
-
-                // console.log()
+                let from_parent = from.parentNode
                 let to = document.querySelector(`[data-id="${this.arrow_array[i].split('-')[1]}"]`)
-
                 try {
-                    var newLine = document.createElementNS('http://www.w3.org/2000/svg','path');
-                    $("svg g").append(newLine);
+                    if (to.dataset.type !== 'start') {
+                        let newLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        $("svg g").append(newLine);
 
-                    var position_from = {
-                        x: from_parent.offsetLeft + from_parent.offsetWidth + 25,
-                        y: from_parent.offsetTop + from.offsetTop + from.offsetHeight / 2
-                    };
+                        let position_from = {
+                            x: from_parent.offsetLeft + from_parent.offsetWidth + 25,
+                            y: from_parent.offsetTop + from.offsetTop + from.offsetHeight / 2
+                        }
 
-                    var position_to = {
-                        x: to.offsetLeft + 5,
-                        y: to.offsetTop + to.offsetHeight / 2
-                    };
+                        let position_to = {
+                            x: to.offsetLeft + 5,
+                            y: to.offsetTop + to.offsetHeight / 2
+                        }
 
-                    var dStrLeft = "M" + (position_from.x) + "," + (position_from.y) + " " + "C" + (position_from.x + 100) + "," + (position_from.y) + " " + (position_to.x - 100) + "," + (position_to.y) + " " + (position_to.x) + "," + (position_to.y);
-                    newLine.setAttribute("d", dStrLeft);
-                } catch (e){
-
-                }
-            } catch(e) {
+                        var dStrLeft = "M" + (position_from.x) + "," + (position_from.y) + " " + "C" + (position_from.x + 100) + "," + (position_from.y) + " " + (position_to.x - 100) + "," + (position_to.y) + " " + (position_to.x) + "," + (position_to.y);
+                        newLine.setAttribute("d", dStrLeft);
+                    }
+                } catch (e) {}
+            } catch (e) {
 
                 let from = document.querySelector(`[data-id="${this.arrow_array[i].split('-')[0]}"]`)
 
@@ -216,12 +215,12 @@ class Process {
         }
 
 
-        if(this.temp_from){
+        if (this.temp_from) {
 
             let from = document.querySelector(`[data-id="${this.temp_from}"]`)
-            let from_parent =  from.parentNode
+            let from_parent = from.parentNode
 
-            var newLine = document.createElementNS('http://www.w3.org/2000/svg','path');
+            var newLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             $("svg g").append(newLine);
             var position_from = {
                 x: from_parent.offsetLeft + from_parent.offsetWidth + 25,
@@ -241,28 +240,28 @@ class Process {
 
     }
 
-    add_arrow(){
-        if(
+    add_arrow() {
+        if (
             this.temp_from && this.temp_to
             && this.temp_to.search('n') == -1 && this.temp_to.search('o') == -1 && this.temp_to.search('e') == -1
             && this.temp_to !== this.temp_from
             && this.temp_from.search(this.temp_to) == -1
-        ){
+        ) {
             // rm old
             let rm_id = undefined
-            for(let i = 0; i < this.arrow_array.length; i++){
+            for (let i = 0; i < this.arrow_array.length; i++) {
                 let el = this.arrow_array[i]
                 let el0 = el.split('-')[0]
-                if(this.temp_from == el0){
+                if (this.temp_from == el0) {
                     rm_id = i
                 }
             }
-            if(rm_id != undefined){
+            if (rm_id != undefined) {
                 this.arrow_array.splice(rm_id, 1);
             }
             // add new
             let str = `${this.temp_from}-${this.temp_to}`
-            if(!this.arrow_array.includes(str)){
+            if (!this.arrow_array.includes(str)) {
                 this.arrow_array.push(`${this.temp_from}-${this.temp_to}`)
                 this.clear_temp()
             }
@@ -271,24 +270,24 @@ class Process {
 
     }
 
-    clear_temp(){
+    clear_temp() {
         this.temp_from = undefined
         this.temp_to = undefined
     }
 
-    load_result(){
+    load_result() {
         this.arrow_array = []
         document.querySelector('#process').innerHTML = ''
         let res = JSON.parse(document.querySelector('#result').value)
-        for(let i = 0; i < res.length; i++){
+        for (let i = 0; i < res.length; i++) {
             // this.arrow_array =
-            if( res[i].norm_target != ''){
+            if (res[i].norm_target != '') {
                 this.arrow_array.push(res[i].norm_target)
             }
-            if( res[i].ok_target != ''){
+            if (res[i].ok_target != '') {
                 this.arrow_array.push(res[i].ok_target)
             }
-            if( res[i].err_target != ''){
+            if (res[i].err_target != '') {
                 this.arrow_array.push(res[i].err_target)
             }
 
@@ -297,10 +296,10 @@ class Process {
 
     }
 
-    save_result(){
+    save_result() {
         let el = document.querySelectorAll('.task')
         let res = []
-        for (let i = 0; i < el.length; i++){
+        for (let i = 0; i < el.length; i++) {
             let r = {
                 id: el[i].dataset.id,
                 title: el[i].innerText,
@@ -316,13 +315,13 @@ class Process {
             }
             res.push(r)
         }
-        document.querySelector('#result').value  = JSON.stringify(res)
+        document.querySelector('#result').value = JSON.stringify(res)
     }
 
-    get_from_arrow_array(id, type){
+    get_from_arrow_array(id, type) {
         let res = false
-        for(let i = 0; i < this.arrow_array.length; i++)
-            if(this.arrow_array[i].search(`${id}${type}`) > -1)
+        for (let i = 0; i < this.arrow_array.length; i++)
+            if (this.arrow_array[i].search(`${id}${type}`) > -1)
                 res = this.arrow_array[i]
         return res
     }
@@ -332,10 +331,9 @@ class Process {
 let process = new Process()
 
 
-
 class Modal {
 
-    constructor(){
+    constructor() {
 
         this.temp_task = undefined
         this.modal_id = undefined
@@ -343,7 +341,7 @@ class Modal {
         this.event()
     }
 
-    event(){
+    event() {
 
         document.querySelector('#radio_from_this_moment').addEventListener('click', (e) => {
             this.radio_switch(e)
@@ -354,7 +352,7 @@ class Modal {
     })
     }
 
-    radio_switch(e){
+    radio_switch(e) {
 
         let show = e.target.dataset.show
         let hide = e.target.dataset.hide
@@ -363,38 +361,39 @@ class Modal {
         document.querySelector(`#${show}`).classList.remove('hide')
     }
 
-    open_modal(el){
+    open_modal(el) {
         this.temp_task = el
         console.log('open_modal')
         this.show_modal(el.dataset.type)
-        if(el.dataset.form){
+        if (el.dataset.form) {
             // alert('Загрузи')
             $(`${this.modal_id}`).deserialize(el.dataset.form)
         }
     }
-    show_modal(title){
+
+    show_modal(title) {
         $('.modal').addClass('hide')
         $('.modal').trigger('reset')
         this.modal_id = `#modal-${title}`
         $(`${this.modal_id}`).removeClass('hide')
     }
 
-    btn_save(){
+    btn_save() {
         console.log('btn_save')
-        if(this.modal_id){
+        if (this.modal_id) {
             // console.log($( `${this.modal_id}` ).serialize())
-            this.temp_task.dataset.form = $( `${this.modal_id}` ).serialize()
+            this.temp_task.dataset.form = $(`${this.modal_id}`).serialize()
         }
 
     }
 
-    btn_rm (){
+    btn_rm() {
         // console.log('btn_rm')
         $('.modal').addClass('hide')
         this.temp_task.remove()
     }
 
-    btn_close(){
+    btn_close() {
         $('.modal').addClass('hide')
     }
 

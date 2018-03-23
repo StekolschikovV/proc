@@ -71,15 +71,13 @@ svg{
 .task[data-type="mailing"] {
     background: #ff41e0;
 }
-
-.task[data-type="timeout"] .norm{
-    display: block;
-    left: 100%;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    background: #333;
+.task[data-type="start"] {
+    background: #7fff7a;
 }
+.task[data-type="proc"] {
+    background: #ffa35a;
+}
+
 .task[data-type="if"] .ok{
     display: block;
     left: 100%;
@@ -94,7 +92,12 @@ svg{
     margin: auto;
     background: red;
 }
-.task[data-type="add"] .norm{
+.task[data-type="start"] .norm,
+.task[data-type="proc"] .norm,
+.task[data-type="rm"] .norm,
+.task[data-type="mailing"] .norm,
+.task[data-type="add"] .norm,
+.task[data-type="timeout"] .norm{
     display: block;
     left: 100%;
     top: 0;
@@ -102,22 +105,7 @@ svg{
     margin: auto;
     background: #333;
 }
-.task[data-type="rm"] .norm{
-    display: block;
-    left: 100%;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    background: #333;
-}
-.task[data-type="mailing"] .norm{
-    display: block;
-    left: 100%;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    background: #333;
-}
+
 /*task*/
 
 

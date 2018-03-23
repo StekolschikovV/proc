@@ -29,7 +29,8 @@
                     <li><a href="#" id="btn-if">Условие</a></li>
                     <li><a href="#" id="btn-add">Добавление</a></li>
                     <li><a href="#" id="btn-rm">Удаление</a></li>
-                    <li><a href="#" id="mailing">Отправка рассылки</a></li>
+                    <li><a href="#" id="btn-mailing">Отправка рассылки</a></li>
+                    <li><a href="#" id="btn-proc">Выбор дочернего процессаи</a></li>
                 </ul>
             </div>
         </div>
@@ -73,6 +74,28 @@
 <!--result-->
 
 <!--modals-->
+<!--rm-->
+<form class="modal hide" id="modal-proc" onsubmit="return false">
+    <div class="title">
+        <input name="title" type="text" value="Отправка рассылки">
+        <div class="close" onclick="modal.btn_close()">x</div>
+    </div>
+    <hr>
+    <h5>Запустить дочерний процесс</h5>
+    <select name="proc">
+        <option value="p1">proc 1</option>
+        <option value="p2">proc 2</option>
+        <option value="p3">proc 3</option>
+        <option value="p4">proc 4</option>
+    </select>
+    <h5>Описание для менеджера</h5>
+    <textarea name="note"></textarea>
+    <div class="text-right">
+        <button onclick="modal.btn_rm()">Удалить</button>
+        <button onclick="modal.btn_save()">Сохранить</button>
+    </div>
+</form>
+<!--rm-->
 <!--rm-->
 <form class="modal hide" id="modal-mailing" onsubmit="return false">
     <div class="title">
@@ -175,8 +198,10 @@
         <div class="close" onclick="modal.btn_close()">x</div>
     </div>
     <hr>
-    <input checked value="1" type="radio" name="t" id='radio_from_this_moment' data-show="from_this_moment" data-hide="from_time">От текущего момента
-    <input value="2" type="radio" name="t" id='radio_from_time' data-show="from_time" data-hide="from_this_moment">Фиксированное время
+    <input checked value="1" type="radio" name="t" id='radio_from_this_moment' data-show="from_this_moment"
+           data-hide="from_time">От текущего момента
+    <input value="2" type="radio" name="t" id='radio_from_time' data-show="from_time" data-hide="from_this_moment">Фиксированное
+    время
     <div id="from_this_moment">
         <h5>Укажите задержку</h5>
         <div class="inline">
@@ -198,8 +223,111 @@
             <input type="text">
             <h5>часов</h5>
         </div>
-
     </div>
+    <div class="inline">
+        <input type="checkbox" name="wait_time">
+        <h5>После задержки дождаться наступления определенного времени</h5>
+    </div>
+    <select name="wait_for_weekday">
+        <option value="0" selected="">--любой день--</option>
+        <option value="-1">--любой будний день--</option>
+        <option value="-2">--любой выходной день--</option>
+        <option value="1">понедельник</option>
+        <option value="2">вторник</option>
+        <option value="3">среда</option>
+        <option value="4">четверг</option>
+        <option value="5">пятница</option>
+        <option value="6">суббота</option>
+        <option value="7">воскресенье</option>
+    </select>
+    <select name="wait_for_hour">
+        <option value="0" selected="">00</option>
+        <option value="1">01</option>
+        <option value="2">02</option>
+        <option value="3">03</option>
+        <option value="4">04</option>
+        <option value="5">05</option>
+        <option value="6">06</option>
+        <option value="7">07</option>
+        <option value="8">08</option>
+        <option value="9">09</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+        <option value="17">17</option>
+        <option value="18">18</option>
+        <option value="19">19</option>
+        <option value="20">20</option>
+        <option value="21">21</option>
+        <option value="22">22</option>
+        <option value="23">23</option>
+    </select>
+    <select name="wait_for_minute">
+        <option value="0" selected="">00</option>
+        <option value="1">01</option>
+        <option value="2">02</option>
+        <option value="3">03</option>
+        <option value="4">04</option>
+        <option value="5">05</option>
+        <option value="6">06</option>
+        <option value="7">07</option>
+        <option value="8">08</option>
+        <option value="9">09</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+        <option value="17">17</option>
+        <option value="18">18</option>
+        <option value="19">19</option>
+        <option value="20">20</option>
+        <option value="21">21</option>
+        <option value="22">22</option>
+        <option value="23">23</option>
+        <option value="24">24</option>
+        <option value="25">25</option>
+        <option value="26">26</option>
+        <option value="27">27</option>
+        <option value="28">28</option>
+        <option value="29">29</option>
+        <option value="30">30</option>
+        <option value="31">31</option>
+        <option value="32">32</option>
+        <option value="33">33</option>
+        <option value="34">34</option>
+        <option value="35">35</option>
+        <option value="36">36</option>
+        <option value="37">37</option>
+        <option value="38">38</option>
+        <option value="39">39</option>
+        <option value="40">40</option>
+        <option value="41">41</option>
+        <option value="42">42</option>
+        <option value="43">43</option>
+        <option value="44">44</option>
+        <option value="45">45</option>
+        <option value="46">46</option>
+        <option value="47">47</option>
+        <option value="48">48</option>
+        <option value="49">49</option>
+        <option value="50">50</option>
+        <option value="51">51</option>
+        <option value="52">52</option>
+        <option value="53">53</option>
+        <option value="54">54</option>
+        <option value="55">55</option>
+        <option value="56">56</option>
+        <option value="57">57</option>
+        <option value="58">58</option>
+        <option value="59">59</option>
+    </select>
     <h5>Описание для менеджера</h5>
     <textarea name="note"></textarea>
     <div class="text-right">
