@@ -53,6 +53,7 @@ class Process {
 
         this.temp_from = undefined
         this.temp_to = undefined
+        this.temp_from_after_rm = undefined
         this.arrow_array = []
 
         this.event()
@@ -93,7 +94,7 @@ class Process {
     })
         $('#process').mousedown(() => {
             if (this.is_cursor_on_process) {
-            console.log('mousedown')
+            // console.log('mousedown', this.cursor_position)
             this.is_mouse_down = true
         } else {
             this.is_mouse_down = true
@@ -130,7 +131,7 @@ class Process {
         new_task_block.setAttribute('data-id', date)
         new_task_block.innerText = title
         new_task_block.setAttribute('data-type', type)
-        $(new_task_block).draggable({containment: "parent", scroll: false, cancel: '.norm, .err, .ok'})
+        $(new_task_block).draggable({containment: "parent", scroll: false, cancel: '.norm, .err, .ok, .rm'})
         $(new_task_block).mousedown(() => {
             this.temp_to = new_task_block.dataset.id
         this.add_arrow()
@@ -142,14 +143,13 @@ class Process {
             new_task_block.style.top = style.top
             new_task_block.style.left = style.left
         }
-        if (form) {
+        if (form)
             new_task_block.setAttribute('data-form', form)
-        }
+
         document.querySelector('#process').appendChild(new_task_block)
 
         // type - norm
         let norm = document.createElement('div')
-        // norm.setAttribute('data-target', '')
         norm.setAttribute('data-id', date + 'n')
         norm.classList.add('norm')
         $(norm).mousedown(() => {
@@ -176,6 +176,33 @@ class Process {
         this.add_arrow()
     })
         new_task_block.appendChild(err)
+        // type - err
+        let rm_arr = document.createElement('div')
+        rm_arr.setAttribute('data-id', date + 'r')
+        rm_arr.classList.add('rm')
+        $(rm_arr).mousedown(() => {
+            this.rm_arrow(rm_arr.parentNode)
+        this.temp_from_after_rm = rm_arr.dataset.id
+    })
+        new_task_block.appendChild(rm_arr)
+
+        this.draw_arrow()
+    }
+
+    rm_arrow(arr){
+        let id_in_arrow_array = undefined
+        for(let i = 0; i < this.arrow_array.length; i++)
+            if(this.arrow_array[i].split('-')[1] == arr.dataset.id)
+                id_in_arrow_array = i
+        if(id_in_arrow_array != undefined){
+            console.log(11, id_in_arrow_array)
+            // this.temp_from = this.arrow_array[id_in_arrow_array].split('-')[0]
+            this.arrow_array.splice(id_in_arrow_array, 1)
+            this.draw_arrow()
+            // console.log(this.arrow_array)
+
+
+        }
 
         this.draw_arrow()
     }
@@ -206,16 +233,16 @@ class Process {
 
                         var dStrLeft = "M" + (position_from.x) + "," + (position_from.y) + " " + "C" + (position_from.x + 100) + "," + (position_from.y) + " " + (position_to.x - 100) + "," + (position_to.y) + " " + (position_to.x) + "," + (position_to.y);
                         newLine.setAttribute("d", dStrLeft);
+
                     }
                 } catch (e) {}
             } catch (e) { }
 
         }
 
+        if (this.temp_from && this.is_mouse_down ) {
 
-        if (this.temp_from) {
-
-            let from = document.querySelector(`[data-id="${this.temp_from}"]`)
+            let from = document.querySelector(`[data-id="${this.temp_from ? this.temp_from : this.temp_from_after_rm}"]`)
             let from_parent = from.parentNode
 
             var newLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -232,8 +259,7 @@ class Process {
 
             var dStrLeft = "M" + (position_from.x) + "," + (position_from.y) + " " + "C" + (position_from.x + 100) + "," + (position_from.y) + " " + (position_to.x - 100) + "," + (position_to.y) + " " + (position_to.x) + "," + (position_to.y);
             newLine.setAttribute("d", dStrLeft);
-        } else
-            document.body.style.background = 'white'
+        }
     }
 
     add_arrow() {
@@ -266,6 +292,7 @@ class Process {
     }
 
     clear_temp() {
+        console.log('--->clear_temp')
         this.temp_from = undefined
         this.temp_to = undefined
         this.draw_arrow()

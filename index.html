@@ -72,7 +72,7 @@
 <!--result-->
 
 <!--modals-->
-<!--rm-->
+<!--proc-->
 <form class="modal hide" id="modal-proc" onsubmit="return false">
     <div class="title">
         <input name="title" type="text" value="Отправка рассылки">
@@ -93,24 +93,22 @@
         <button onclick="modal.btn_save()">Сохранить</button>
     </div>
 </form>
-<!--rm-->
-<!--rm-->
+<!--proc-->
+<!--mailing-->
 <form class="modal hide" id="modal-mailing" onsubmit="return false">
     <div class="title">
         <input name="title" type="text" value="Отправка рассылки">
         <div class="close" onclick="modal.btn_close()">x</div>
     </div>
     <hr>
-    <h5>Рассылка по группе</h5>
-    <select name="group">
-        <option value="g1">g1</option>
-        <option value="g2">g2</option>
-        <option value="g3">g3</option>
-        <option value="g4">g4</option>
-    </select>
 
-    <h5>Текст</h5>
-    <textarea name="text"></textarea>
+    <h5>Использовать текст из рассылки</h5>
+    <select name="mailing_id">
+        <option value="g1">r1</option>
+        <option value="g2">r2</option>
+        <option value="g3">r3</option>
+        <option value="g4">r4</option>
+    </select>
 
     <h5>Описание для менеджера</h5>
     <textarea name="note"></textarea>
@@ -119,7 +117,7 @@
         <button onclick="modal.btn_save()">Сохранить</button>
     </div>
 </form>
-<!--rm-->
+<!--mailing-->
 <!--rm-->
 <form class="modal hide" id="modal-rm" onsubmit="return false">
     <div class="title">
